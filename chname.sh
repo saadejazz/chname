@@ -80,7 +80,7 @@ while [ $# -gt 0 ]; do
 
         # get the leaf in the path name and also everything else
         # leaf (fit) and everything else (evelse)
-        echo $fname
+        # echo $fname
         rname=`echo $fname | rev`
         fit=`echo $rname | cut -d"/" -f1`
         lnt=${#fit}
