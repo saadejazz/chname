@@ -42,7 +42,7 @@ while [ $# -gt 0 ]; do
     
     # pop first positional variable
     key=$1
-    shift
+
 
     # construct 'find' command based on options provided
     # for non-recursive find, maxdepth is used
@@ -63,6 +63,7 @@ while [ $# -gt 0 ]; do
         fi
     fi
     
+    shift
     
     # go through each file
     for fname in `$FI | tac`
