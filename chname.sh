@@ -41,30 +41,28 @@ done
 while [ $# -gt 0 ]; do
     
     # pop first positional variable
-    key=$1
-
+    key="$1"
+    shift
 
     # construct 'find' command based on options provided
     # for non-recursive find, maxdepth is used
     # maxdepth is a global option, it needs to be written first
-    FI="find $1 -type f"
+    FI="find $key -type f"
     if [ "$SUB" = "true" ]
     then
-        FI="find $1 -maxdepth 1"
+        FI="find $key -maxdepth 1"
         if [ "$RECURSIVE" = "true" ]
         then
-            FI="find $1"
+            FI="find $key"
         fi
     else
-        FI="find $1 -maxdepth 1 -type f"
+        FI="find $key -maxdepth 1 -type f"
         if [ "$RECURSIVE" = "true" ]
         then
-            FI="find $1 -type f"
+            FI="find $key -type f"
         fi
     fi
-    
-    shift
-    
+ 
     # go through each file
     for fname in `$FI | tac`
     do
@@ -105,24 +103,21 @@ while [ $# -gt 0 ]; do
             esac
         fi
 
-        # code to change to uppercase
         # if both -u and -l are given, -u takes precedence
         if [ "$UPPER" = "true" ]
         then
             casse=`echo "$fit" | sed 's/.*/\U&/'`
-            if [ $fit != $casse ]
-            then
-                mv $fname $evelse$casse$ext
-            fi
-
-        # code to change to lowercase
         elif [ "$LOWER" = "true" ]
         then
             casse=`echo "$fit" | sed 's/.*/\L&/'`
-            if [ $fit != $casse ]
-            then
-                mv $fname $evelse$casse$ext
-            fi
+        else
+            casse=`echo "$fit"`
+        fi
+
+        # changing case if needed
+        if [ $fit != $casse ]
+        then
+            mv $fname $evelse$casse$ext
         fi
     done
 done
