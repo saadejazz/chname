@@ -67,29 +67,28 @@ while [ $# -gt 0 ]; do
     for fname in `$FI | tac`
     do
 
-        # if arfument is a directory, do not change it
-        if [ "$fname" = "$key" ]
+        # if argument is a directory, do not change it
+        flag=true
+        if [ "$flag" = "true" ]
         then
-            if [ ! -f $fname ]
+            if [ "$fname" = "$key" ]
             then
-                continue
+                if [ ! -f $fname ]
+                then
+                    FLAG=false
+                    continue
+                fi
             fi
         fi
 
         # get the leaf in the path name and also everything else
         # leaf (fit) and everything else (evelse)
-        # echo $fname
-        rname=`echo $fname | rev`
-        fit=`echo $rname | cut -d"/" -f1`
-        lnt=${#fit}
-        evelse=`echo $rname | cut -c $lnt-`
-        evelse=`echo $evelse | cut -c 2-`
-        evelse=`echo $evelse | rev`
+        fit="$(basename "${fname}")"
+        evelse="$(dirname "${fname}")"/
         
         # if argument is a file, also get extension
         # the case of the extension is to be preserved
         ext=""
-        fit=`echo $fit | rev`
         if [ -f $fname ]
         then
 
@@ -97,8 +96,8 @@ while [ $# -gt 0 ]; do
             # if extension exists, separate it
             case "$fit" in
                 *.*)
-                    ext=.`echo $fit | cut -d"." -f2`
-                    fit=`echo $fit | cut -d"." -f1`
+                    ext=."${fit#*.}"
+                    fit="${fit%%.*}"
                     ;;
             esac
         fi
