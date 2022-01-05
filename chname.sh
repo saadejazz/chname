@@ -46,24 +46,21 @@ while [ $# -gt 0 ]; do
     # construct 'find' command based on options provided
     # for non-recursive find, maxdepth is used
     # maxdepth is a global option, it needs to be written first
-    FI="find $key -type f"
-    if [ "$SUB" = "true" ]
+
+    FI=$key
+    search=$FI
+    if [ "$RECURSIVE" = "true" ]
     then
-        FI="find $key -maxdepth 1"
-        if [ "$RECURSIVE" = "true" ]
-        then
-            FI="find $key"
-        fi
-    else
-        FI="find $key -maxdepth 1 -type f"
-        if [ "$RECURSIVE" = "true" ]
+        FI="find $key"
+        if [ "$SUB" = "false" ]
         then
             FI="find $key -type f"
         fi
+        search=`$FI | tac`
     fi
  
     # go through each file
-    for fname in `$FI | tac`
+    for fname in $search
     do
         # get the leaf in the path name and also everything else
         # leaf (fit) and everything else (evelse)
