@@ -39,7 +39,6 @@ while [ $# -gt 0 ]; do
 done
 
 while [ $# -gt 0 ]; do
-    
     # pop first positional variable
     key="$1"
     shift
@@ -66,7 +65,6 @@ while [ $# -gt 0 ]; do
     # go through each file
     for fname in `$FI | tac`
     do
-
         # if argument is a directory, do not change it
         flag=true
         if [ "$flag" = "true" ]
@@ -91,7 +89,6 @@ while [ $# -gt 0 ]; do
         ext=""
         if [ -f $fname ]
         then
-
             # check if file has an extension
             # if extension exists, separate it
             case "$fit" in
