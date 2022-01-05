@@ -65,20 +65,6 @@ while [ $# -gt 0 ]; do
     # go through each file
     for fname in `$FI | tac`
     do
-        # if argument is a directory, do not change it
-        flag=true
-        if [ "$flag" = "true" ]
-        then
-            if [ "$fname" = "$key" ]
-            then
-                if [ ! -f $fname ]
-                then
-                    FLAG=false
-                    continue
-                fi
-            fi
-        fi
-
         # get the leaf in the path name and also everything else
         # leaf (fit) and everything else (evelse)
         fit="$(basename "${fname}")"
