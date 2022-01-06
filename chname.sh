@@ -39,14 +39,13 @@ while [ $# -gt 0 ]; do
 done
 
 while [ $# -gt 0 ]; do
+    # need some code to print error if invalid file/dir name
+
     # pop first positional variable
     key="$1"
     shift
 
-    # construct 'find' command based on options provided
-    # for non-recursive find, maxdepth is used
-    # maxdepth is a global option, it needs to be written first
-
+    # construct 'find' command if needed
     FI=$key
     search=$FI
     if [ "$RECURSIVE" = "true" ]
@@ -62,18 +61,15 @@ while [ $# -gt 0 ]; do
     # go through each file
     for fname in $search
     do
-        # get the leaf in the path name and also everything else
-        # leaf (fit) and everything else (evelse)
+        # get the leaf (fit) in the path name and also everything else (evelse)
         fit="$(basename "${fname}")"
         evelse="$(dirname "${fname}")"/
         
-        # if argument is a file, also get extension
-        # the case of the extension is to be preserved
+        # if argument is a file, also get extension to preserve its case
         ext=""
         if [ -f $fname ]
         then
-            # check if file has an extension
-            # if extension exists, separate it
+            # check if file has an extension, if so, separate it
             case "$fit" in
                 *.*)
                     ext=."${fit#*.}"
