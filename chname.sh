@@ -38,6 +38,24 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# -s without -r
+if [ $# -eq 0 ]
+then
+    if [ \( "$RECURSIVE" = "false" \) -a \( "$SUB" = "true" \) ]
+    then
+        # clear everything from arguments
+        while [ $# -gt 0 ]; do
+            shift
+        done
+        
+        # set anything just to run the next loop once
+        set "hello"
+    else
+        echo "No files specified"
+        exit 1
+    fi
+fi
+
 while [ $# -gt 0 ]; do
     # need some code to print error if invalid file/dir name
 
@@ -56,6 +74,11 @@ while [ $# -gt 0 ]; do
             FI="find $key -type f"
         fi
         search=`$FI | tac`
+    else
+        if [ "$SUB" = "true" ]
+        then
+            search=`find -maxdepth 1 -type d`
+        fi
     fi
  
     # go through each file
