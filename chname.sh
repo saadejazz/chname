@@ -6,6 +6,22 @@ LOWER=false
 RECURSIVE=false
 SUB=false
 
+# function for help message
+help_text(){
+    echo "
+        Usage: chname  [-r|--recursive] [-s|--subdirectories] [-l|--lowercase|-u|-uppercase] <dir/file names...>
+        chname  [-h|--help]
+        
+        This script is dedicated to lowerizing (-l or --lowercase) file and directory names or uppercasing (-u or
+        --uppercase) file and directory names given as arguments.
+        
+        Changes may be done either with recursion (for all the files in subdirectories '-r' or --recursive) or 
+        without it.  In recursive mode changes may affect only regular file names  or  subdirectory names 
+        (if with '-s' or --subdirectories) as well.  Option -s without -r allows modification of directory names 
+        in the current directory. Option -h (or --help) should print help message.
+        "
+}
+
 # read command line arguments
 while [ $# -gt 0 ]; do
     key="$1"
@@ -26,9 +42,12 @@ while [ $# -gt 0 ]; do
             SUB=true
             shift
             ;;
+        -h | --help)
+            help_text
+            exit 0
+            ;;
         -*)
             # ignore every other command line argument
-            # implement -h | --help before this
             shift
             ;;
         *)
@@ -51,14 +70,13 @@ then
         # set anything just to run the next loop once
         set "hello"
     else
-        echo "No files specified"
+        echo "No files specified."
+        help_text
         exit 1
     fi
 fi
 
 while [ $# -gt 0 ]; do
-    # need some code to print error if invalid file/dir name
-
     # pop first positional variable
     key="$1"
     shift
