@@ -76,10 +76,27 @@ then
     fi
 fi
 
+# if both -u and -l are given, -u takes precedence
+if [ \( "$UPPER" = "true" \) -a \( "$LOWER" = "true" \) ]
+then
+    echo "Both uppercase and lowercase options provided. Uppercase takes precedence."
+fi
+
 while [ $# -gt 0 ]; do
+
     # pop first positional variable
     key="$1"
     shift
+
+    # check if argument is valid or not
+    if [ \( "$RECURSIVE" = "true" \) -o \( "$SUB" = "false" \) ]
+    then
+        if [ ! -f $key -a ! -d $key ]
+        then
+            echo "$key is not a valid file or directory."
+            continue
+        fi
+    fi
 
     # construct 'find' command if needed
     FI=$key
@@ -119,7 +136,7 @@ while [ $# -gt 0 ]; do
             esac
         fi
 
-        # if both -u and -l are given, -u takes precedence
+        # convert case
         if [ "$UPPER" = "true" ]
         then
             casse=`echo "$fit" | sed 's/.*/\U&/'`
