@@ -25,6 +25,7 @@ then
 else
     echo "Test for simple uppercase failed! :("
 fi
+echo
 echo "Testing the same for lowercase"
 ./chname.sh -l $MAIN_DIR/FILE.xy $MAIN_DIR/DIR
 echo "Verifying the result"
@@ -46,7 +47,7 @@ echo "Created a file: $MAIN_DIR/dir/dir/dir/file.xy"
 echo "Running command..."
 ./chname.sh -r -u $MAIN_DIR/dir
 echo "Verifying the result"
-if [ -f $MAIN_DIR/dir/dir/dir/FILE.xy ]
+if [ -f $MAIN_DIR/DIR/dir/dir/FILE.xy ]
 then
     echo "Test for recursive uppercase passed! :)"
 else
@@ -59,7 +60,7 @@ echo
 echo "Testing recursive subdirectories"
 echo "Testing use case: chname -r -s -u <DIRECTORY_NAME>"
 echo "Running command..."
-./chname.sh -r -s -u $MAIN_DIR/dir
+./chname.sh -r -s -u $MAIN_DIR/DIR
 echo "Verifying the result"
 if [ -f $MAIN_DIR/DIR/DIR/DIR/FILE.xy ]
 then

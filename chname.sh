@@ -109,6 +109,10 @@ while [ $# -gt 0 ]; do
             FI="find $key -type f"
         fi
         search=`$FI | tac`
+        if [ \( "$SUB" = "false" \) -a -d $key ]
+        then
+            search="$search$IFS$key"
+        fi
     else
         if [ "$SUB" = "true" ]
         then
