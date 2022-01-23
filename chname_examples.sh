@@ -81,10 +81,10 @@ echo "This is to avoid unnecessary changes in the current dir"
 echo "Also provided execution permissions"
 echo "Running command..."
 cd $MAIN_DIR
-./chname.sh -s -l
+./chname.sh -s -l dir/DIR
 cd ..
 echo "Verifying the result"
-if [ -d $MAIN_DIR/dir ]
+if [ -d $MAIN_DIR/dir/dir ]
 then
     echo "Test for subdirectories w/o recursive passed! :)"
 else
@@ -97,7 +97,7 @@ echo
 echo "Testing working for invalid argument"
 echo "Testing use case: chname -l <INVALID_FILE>"
 echo "Running command..."
-echo "An error message should be printed for invalid file"
+echo "An error message should be printed for invalid file or directory"
 ./chname.sh -l $MAIN_DIR/MIR
 
 # check if help is working
