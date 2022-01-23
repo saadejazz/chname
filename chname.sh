@@ -9,17 +9,17 @@ SUB=false
 # function for help message
 help_text(){
     echo "
-        Usage: chname  [-r|--recursive] [-s|--subdirectories] [-l|--lowercase|-u|-uppercase] <dir/file names...>
-        chname  [-h|--help]
-        
-        This script is dedicated to lowerizing (-l or --lowercase) file and directory names or uppercasing (-u or
-        --uppercase) file and directory names given as arguments.
-        
-        Changes may be done either with recursion (for all the files in subdirectories '-r' or --recursive) or 
-        without it.  In recursive mode changes may affect only regular file names  or  subdirectory names 
-        (if with '-s' or --subdirectories) as well.  Option -s without -r allows modification of directory names 
-        in the current directory. Option -h (or --help) should print help message.
-        "
+    Usage: chname  [-r|--recursive] [-s|--subdirectories] [-l|--lowercase|-u|-uppercase] <dir/file names...>
+    chname  [-h|--help]
+    
+    This script is dedicated to lowerizing (-l or --lowercase) file and directory names or uppercasing (-u or
+    --uppercase) file and directory names given as arguments.
+    
+    Changes may be done either with recursion (for all the files in subdirectories '-r' or --recursive) or 
+    without it.  In recursive mode changes may affect only regular file names  or  subdirectory names 
+    (if with '-s' or --subdirectories) as well.  Option -s without -r allows modification of directory names 
+    in the current directory. Option -h (or --help) should print help message.
+    "
 }
 
 # read command line arguments
@@ -58,17 +58,14 @@ while [ $# -gt 0 ]; do
 done
 
 # -s without -r
+FLAG=false
 if [ $# -eq 0 ]
 then
     if [ \( "$RECURSIVE" = "false" \) -a \( "$SUB" = "true" \) ]
     then
-        # clear everything from arguments
-        while [ $# -gt 0 ]; do
-            shift
-        done
-        
         # set anything just to run the next loop once
         set "hello"
+        FLAG=true
     else
         echo "No files specified."
         help_text
@@ -86,16 +83,11 @@ while [ $# -gt 0 ]; do
 
     # pop first positional variable
     key="$1"
-    shift
 
     # check if argument is valid or not
     if [ \( "$RECURSIVE" = "true" \) -o \( "$SUB" = "false" \) ]
     then
-        if [ ! -f $key -a ! -d $key ]
-        then
-            echo "$key is not a valid file or directory."
-            continue
-        fi
+        shift
     fi
 
     # construct 'find' command if needed
@@ -117,12 +109,25 @@ while [ $# -gt 0 ]; do
         if [ "$SUB" = "true" ]
         then
             search=`find -maxdepth 1 -type d`
+            while [ $# -gt 0 ]; do
+                search="$search$IFS$1"
+                shift
+            done
         fi
     fi
  
     # go through each file
     for fname in $search
     do
+        if [ ! -f $fname -a ! -d $fname ]
+        then
+            if [ "$FLAG" = "false" ]
+            then
+                echo "$key is not a valid file or directory."
+            fi
+            continue
+        fi
+
         # get the leaf (fit) in the path name and also everything else (evelse)
         fit="$(basename "${fname}")"
         evelse="$(dirname "${fname}")"/
