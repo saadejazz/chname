@@ -1,5 +1,18 @@
 #!/bin/sh
 
+########################################## Unclear usages ################################################
+# These detail usages that are not clear in the prompt
+# 
+# Case: the fate of folder argument in recursive
+# chname -r -u <lower_case_folder>
+# This code also converts the folder name in the argument to uppercase, in addition to all files inside it
+# 
+# Case: subdirectories option without recursive
+# chname -s -u <file1> <file2>
+# This code will uppercase all folder names in its current directory (caution advised) and also uppercase
+# the file arguments
+# 
+
 # variables for options
 UPPER=false
 LOWER=false
