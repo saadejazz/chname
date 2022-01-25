@@ -122,7 +122,6 @@ echo "Running command: chname.sh -r -u $LROOTNAME"
 ./chname.sh -r -u $LROOTNAME
 
 echo "Every file in folder tree created (even inside subdirectories) would be converted to uppercase"
-echo "Additionally the folder argument name will also be uppercase"
 echo "Verifying automatically..."
 
 # checking only to files as its enough
