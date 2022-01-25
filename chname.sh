@@ -12,6 +12,8 @@
 # This code will uppercase all folder names in its current directory (caution advised) and also uppercase
 # the file arguments
 # 
+# when converting case, the extensions are always preserved.
+# 
 
 # variables for options
 UPPER=false
