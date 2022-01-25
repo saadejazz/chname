@@ -1,6 +1,19 @@
 #!/bin/sh
 
-# test script
+############################### Test Script ###################################
+# following tests are conducted
+# 1. Uppercase for a file and a folder
+# 2. Lowercase for a file and a folder
+# 3. Changing case with multiple file names with asterisk (*)
+# 4. Recursive case changing
+# 5. Recursive case changing with subdirectories
+
+# following errors are also simulated
+# 1. Invalid arguments provided (invalid filename etc.)
+# 2. No arguments provided
+# 3. -u and -l both options missing
+
+# also tests the error message
 
 echo "Starting testing..."
 echo
@@ -48,7 +61,7 @@ echo "Running command: chname.sh -u $LROOTNAME/names/saad.csv $LROOTNAME/names"
 
 echo "The file and folder mentioned above would be changed to $LROOTNAME/names/SAAD.csv and $LROOTNAME/NAMES"
 echo "Verifying automatically..."
-
+ 
 if [ -f "$LROOTNAME/NAMES/SAAD.csv" -a -d "$LROOTNAME/NAMES" ]
 then
     echo "Test for simple uppercase passed"

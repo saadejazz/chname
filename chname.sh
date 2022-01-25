@@ -127,6 +127,10 @@ while [ $# -gt 0 ]; do
     else
         if [ "$SUB" = "true" ]
         then
+            echo "-s is specified without -r"
+            echo "folders in the current directory will be changed"
+            echo "Caution is advised. Press [ENTER] to continue"
+            read continue
             search=`find -maxdepth 1 -type d`
             while [ $# -gt 0 ]; do
                 search="$search$IFS$1"
