@@ -81,7 +81,6 @@ then
         FLAG=true
     else
         echo "No files specified."
-        help_text
         exit 1
     fi
 fi
@@ -90,6 +89,13 @@ fi
 if [ \( "$UPPER" = "true" \) -a \( "$LOWER" = "true" \) ]
 then
     echo "Both uppercase and lowercase options provided. Uppercase takes precedence."
+fi
+
+# if none of -u and -l are given, -u takes precedence
+if [ \( "$UPPER" = "false" \) -a \( "$LOWER" = "false" \) ]
+then
+    echo "None of uppercase or lowercase options provided."
+    exit
 fi
 
 while [ $# -gt 0 ]; do

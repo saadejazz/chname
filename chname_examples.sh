@@ -2,117 +2,184 @@
 
 # test script
 
-PASSED=true
-
-# create a simple test folder with a weird name, assume that it doesnt already exist
-MAIN_DIR="test_special_123"
-mkdir $MAIN_DIR
-echo "Created a directory to perform tests in: $MAIN_DIR"
-
-# test a file and a directory for simple lowercase and uppercase
+echo "Starting testing..."
 echo
-echo "Starting testing"
-echo "Testing use case: chname -u <FILE_NAME> <DIRECTORY_NAME>"
-touch $MAIN_DIR/file.xy
-mkdir $MAIN_DIR/dir
-echo "Created a file $MAIN_DIR/file.xy and a directory $MAIN_DIR/dir"
-echo "Running command..."
-./chname.sh -u $MAIN_DIR/file.xy $MAIN_DIR/dir
-echo "Verifying the result"
-if [ -f $MAIN_DIR/FILE.xy -a -d $MAIN_DIR/DIR ]
-then
-    echo "Test for simple uppercase passed! :)"
-else
-    echo "Test for simple uppercase failed! :("
-fi
-echo
-echo "Testing the same for lowercase"
-./chname.sh -l $MAIN_DIR/FILE.xy $MAIN_DIR/DIR
-echo "Verifying the result"
-if [ -f $MAIN_DIR/file.xy -a -d $MAIN_DIR/dir ]
-then
-    echo "Test for simple lowercase passed! :)"
-else
-    echo "Test for simple lowercase failed! :("
-    PASSED=false
-fi
+echo "The script will create test folders and files in the current directory"
+echo "The created folders and files would be deleted upon completion of tests"
+echo "It must be noted that the extensions of the files are always preserved."
+echo "At any point in the test, press Keyboard Interrupt to exit. This will not
+delete the created folders. Manual deletion would be required."
+echo "press [ENTER] to continue"
+read continue
 
-# testing recursive
-echo
-echo "Testing recursive"
-echo "Testing use case: chname -r -u <DIRECTORY_NAME>"
-mkdir -p $MAIN_DIR/dir/dir/dir
-touch $MAIN_DIR/dir/dir/dir/file.xy
-echo "Created a file: $MAIN_DIR/dir/dir/dir/file.xy"
-echo "Running command..."
-./chname.sh -r -u $MAIN_DIR/dir
-echo "Verifying the result"
-if [ -f $MAIN_DIR/DIR/dir/dir/FILE.xy ]
-then
-    echo "Test for recursive uppercase passed! :)"
-else
-    echo "Test for recursive uppercase failed! :("
-    PASSED=false
-fi
+# making the testing tree (lower and upper case)
+LROOTNAME="test_directory"
+UROOTNAME="TEST_DIRECTORY"
 
-# testing recursive subdirectories
 echo
-echo "Testing recursive subdirectories"
-echo "Testing use case: chname -r -s -u <DIRECTORY_NAME>"
-echo "Running command..."
-./chname.sh -r -s -u $MAIN_DIR/DIR
-echo "Verifying the result"
-if [ -f $MAIN_DIR/DIR/DIR/DIR/FILE.xy ]
+echo "Creating testing tree with root folder name: $LROOTNAME"
+mkdir -p $LROOTNAME/style/work/helium/elements
+mkdir -p $LROOTNAME/studio/server/
+mkdir -p $LROOTNAME/work/loop/
+mkdir -p $LROOTNAME/names/
+
+touch $LROOTNAME/studio/file.xy
+touch $LROOTNAME/names/saad.csv
+touch $LROOTNAME/names/adele.vsx
+touch $LROOTNAME/names/hugo.cfg
+touch $LROOTNAME/names/maria.pln
+touch $LROOTNAME/work/korea.xyz
+touch $LROOTNAME/work/kowa.xyz
+touch $LROOTNAME/work/koee.xyz
+touch $LROOTNAME/style/work/helium/elements/joker.py
+
+echo "Folders and files created. You can see all the files below"
+echo
+find $LROOTNAME
+echo
+echo "press [ENTER] to continue"
+read continue
+
+# testing simple uppercase
+echo "Testing simple uppercase for folder and file"
+echo "Running command: chname.sh -u $LROOTNAME/names/saad.csv $LROOTNAME/names"
+
+./chname.sh -u $LROOTNAME/names/saad.csv $LROOTNAME/names
+
+echo "The file and folder mentioned above would be changed to $LROOTNAME/names/SAAD.csv and $LROOTNAME/NAMES"
+echo "Verifying automatically..."
+
+if [ -f "$LROOTNAME/NAMES/SAAD.csv" -a -d "$LROOTNAME/NAMES" ]
 then
-    echo "Test for recursive subdirectories passed! :)"
+    echo "Test for simple uppercase passed"
 else
-    echo "Test for recursive subdirectories failed! :("
-    PASSED=false
+    echo "Test for simple uppercase failed"
 fi
 
-# testing subdirectories without recursive
-echo
-echo "Testing subdirectories without recursive"
-echo "Testing use case: chname -s -l <DIRECTORY_NAME>"
-cp chname.sh $MAIN_DIR/chname.sh
-chmod +x $MAIN_DIR/chname.sh
-echo "Created a copy of the script inside the test directory"
-echo "This is to avoid unnecessary changes in the current dir"
-echo "Also provided execution permissions"
-echo "Running command..."
-cd $MAIN_DIR
-./chname.sh -s -l dir/DIR
-cd ..
-echo "Verifying the result"
-if [ -d $MAIN_DIR/dir/dir ]
+echo "You can manually verify and then continue."
+echo "press [ENTER] to continue"
+read continue
+
+# testing simple lowercase
+echo "Testing simple lowercase for folder and file"
+echo "Running command: chname.sh -l $LROOTNAME/NAMES/SAAD.csv $LROOTNAME/NAMES"
+
+./chname.sh -l $LROOTNAME/NAMES/SAAD.csv $LROOTNAME/NAMES
+
+echo "The file and folder mentioned above would be changed to $LROOTNAME/names/saad.csv and $LROOTNAME/names"
+echo "Verifying automatically..."
+
+if [ -f "$LROOTNAME/names/saad.csv" -a -d "$LROOTNAME/names" ]
 then
-    echo "Test for subdirectories w/o recursive passed! :)"
+    echo "Test for simple lowercase passed"
 else
-    echo "Test for subdirectories w/o recursive failed! :("
-    PASSED=false
+    echo "Test for simple lowercase failed"
 fi
 
-# checking errors
-echo
-echo "Testing working for invalid argument"
-echo "Testing use case: chname -l <INVALID_FILE>"
-echo "Running command..."
-echo "An error message should be printed for invalid file or directory"
-./chname.sh -l $MAIN_DIR/MIR
+echo "You can manually verify and then continue."
+echo "press [ENTER] to continue"
+read continue
 
-# check if help is working
+# testing multiple file input with asterisk
+echo "Testing uppercase with multiple file names (given with asterisk)"
+echo "Running command: chname.sh -u $LROOTNAME/work/ko*"
+
+./chname.sh -u $LROOTNAME/work/ko*
+
+echo "All the files in the folder $LROOTNAME/work/ start with ko and will be changed to uppercase"
+echo "Verifying automatically..."
+
+# just checking one file as it is enough to
+if [ -f "$LROOTNAME/work/KOWA.xyz" ]
+then
+    echo "Test for multiple files (with *) passed"
+else
+    echo "Test for multiple files (with *) failed"
+fi
+
+echo "You can manually verify and then continue."
+echo "press [ENTER] to continue"
+read continue
+
+
+# testing recursive functionality
+echo "Testing recursive functionality"
+echo "Running command: chname.sh -r -u $LROOTNAME"
+
+./chname.sh -r -u $LROOTNAME
+
+echo "Every file in folder tree created (even inside subdirectories) would be converted to uppercase"
+echo "Verifying automatically..."
+
+# checking only to files as its enough
+if [ -f "$UROOTNAME/studio/FILE.xy" -a -f "$UROOTNAME/style/work/helium/elements/JOKER.py" ]
+then
+    echo "Test for recursive passed"
+else
+    echo "Test for recursive failed"
+fi
+
+echo "You can manually verify and then continue."
+echo "press [ENTER] to continue"
+read continue
+
+# testing recusive functionality with subdirectories
+echo "Testing recursive functionality with subdirectories"
+echo "Running command: chname.sh -r -s -u $UROOTNAME"
+
+./chname.sh -r -s -u $UROOTNAME
+
+echo "Every file and folder in folder tree created (even inside subdirectories) would be converted to uppercase"
+echo "Verifying automatically..."
+
+# checking only to files as its enough
+if [ -f "$UROOTNAME/STUDIO/FILE.xy" -a -f "$UROOTNAME/STYLE/WORK/HELIUM/ELEMENTS/JOKER.py" ]
+then
+    echo "Test for recursive subdirectories passed"
+else
+    echo "Test for recursive subdirectories failed"
+fi
+
+echo "You can manually verify and then continue."
+echo "press [ENTER] to continue"
+read continue
+
+# testing all errors
+echo "Now, we will test error cases"
 echo
-echo "Tesing help command"
-echo "Running command..."
-echo "A help message should appear."
+echo "For providing invalid file/folder arguments"
+echo "Running chname.sh -l $LROOTNAME"
+echo "Error printed: "
+echo
+./chname.sh -l $LROOTNAME
+echo
+
+echo "For providing no arguments"
+echo "Running chname.sh -l -s -r"
+echo "Error printed: "
+echo
+./chname.sh -l -s -r
+echo
+
+echo "For providing none of uppercase or lowercase"
+echo "Running chname.sh -r -s $UROOTNAME"
+echo "Error printed: "
+echo
+./chname.sh -r -s $UROOTNAME
+echo
+
+echo "It must be noted that the following functionalities are not considered erroronous"
+echo "When both -u and -l are provided, -u takes precedence"
+echo "If the case of the argument is already as desired, it will be ignored without any error message"
+echo
+echo "press [ENTER] to continue"
+read continue
+
+# help message
+echo "Running help message: chname.sh -h"
 ./chname.sh -h
 
-if [ "$PASSED" = "true" ]
-then
-    echo "All verifiable tests passed. Hooray!!"
-else
-    echo "Some tests failed. :("
-fi
+echo "All tests are finished. Press [ENTER] to delete created folder and exit."
+read continue
 
-# clean up -- remove the main directory
-rm -R $MAIN_DIR
+rm -R $UROOTNAME
