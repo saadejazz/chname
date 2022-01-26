@@ -1,7 +1,8 @@
 #!/bin/sh
 
 ########################################## Unclear usages ################################################
-# These detail usages that are not clear in the prompt
+# These detail usages that are not clear in the prompt. The code is in pure shell as required.
+# Have to have weird indentations at some place to add newline characters (without tabs) in posix-compliant
 # 
 # Case: the fate of folder argument in recursive
 # chname -r -u <lower_case_folder>
@@ -124,7 +125,9 @@ while [ $# -gt 0 ]; do
         search=`$FI | tac`
         if [ \( "$SUB" = "false" \) -a -d $key ]
         then
-            search="$search$IFS$key"
+            # have to add newline (posix compliant way)
+            search="$search
+$key"
         fi
     else
         if [ "$SUB" = "true" ]
@@ -135,11 +138,18 @@ while [ $# -gt 0 ]; do
             read continue
             search=`find -maxdepth 1 -type d`
             while [ $# -gt 0 ]; do
-                search="$search$IFS$1"
+                search="$search
+$1"
                 shift
             done
         fi
     fi
+
+    # to cater for spaces in files and folder names
+    # the indentation is intentional
+    OLDIFS=$IFS
+    IFS='
+'
  
     # go through each file
     for fname in $search
@@ -148,7 +158,7 @@ while [ $# -gt 0 ]; do
         then
             if [ "$FLAG" = "false" ]
             then
-                echo "$key is not a valid file or directory."
+                echo "$fname is not a valid file or directory."
             fi
             continue
         fi
@@ -187,4 +197,6 @@ while [ $# -gt 0 ]; do
             mv $fname $evelse$casse$ext
         fi
     done
+
+    IFS=$OLDIFS
 done
