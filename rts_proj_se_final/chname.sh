@@ -2,7 +2,7 @@
 
 ########################################## Unclear usages ################################################
 # These detail usages that are not clear in the prompt. The code is in pure shell as required.
-# Have to have weird indentations at some place for newline characters (without tabs) for posix-compliance
+# Have to have weird indentations at some place to add newline characters (without tabs) in posix-compliant
 # 
 # Case: the fate of folder argument in recursive
 # chname -r -u <lower_case_folder>
